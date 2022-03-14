@@ -1,0 +1,42 @@
+#######################################
+# Syntax Coloring Map
+#######################################
+
+#######################################
+# Datatypes (KEYWORD1)
+#######################################
+
+MD_UISwitch	KEYWORD1
+MD_UISwitch_Digital	KEYWORD1
+MD_UISwitch_User	KEYWORD1
+MD_UISwitch_Analog	KEYWORD1
+MD_UISwitch_Matrix	KEYWORD1
+MD_UISwitch_4017KM	KEYWORD1
+
+#######################################
+# Methods and Functions (KEYWORD2)
+#######################################
+
+setDebounceTime	KEYWORD2
+setDoublePressTime	KEYWORD2
+setRepeatTime	KEYWORD2
+setLongPressTime	KEYWORD2
+enableRepeat	KEYWORD2
+enableDoublePress	KEYWORD2
+enableLongPress	KEYWORD2
+enableRepeatResult	KEYWORD2
+begin	KEYWORD2
+read	KEYWORD2
+getKey	KEYWORD2
+
+######################################
+# Constants (LITERAL1)
+#######################################
+
+KEY_NULL	LITERAL1
+KEY_UP	LITERAL1
+KEY_DOWN	LITERAL1
+KEY_PRESS	LITERAL1
+KEY_DPRESS	LITERAL1
+KEY_LONGPRESS	LITERAL1
+KEY_RPTPRESS	LITERAL1
