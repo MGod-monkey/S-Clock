@@ -9,57 +9,65 @@ static void DateMenu_Show_Dalender(lv_event_t* e);
 
 static void DateMenu_Roller_Event(lv_event_t* e)
 {
-    lv_event_code_t code = lv_event_get_code(e);
+    // lv_event_code_t code = lv_event_get_code(e);
     lv_obj_t *obj = lv_event_get_target(e);
 
-    static int16_t mask_top_id = -1;
-    static int16_t mask_bottom_id = -1;
-    if (code == LV_EVENT_COVER_CHECK) {
-        lv_event_set_cover_res(e, LV_COVER_RES_MASKED);
-    } else if (code == LV_EVENT_DRAW_MAIN_BEGIN) {
-        /* add mask */
-        const lv_font_t * font = lv_obj_get_style_text_font(obj, LV_PART_MAIN);
-        lv_coord_t line_space = lv_obj_get_style_text_line_space(obj, LV_PART_MAIN);
-        lv_coord_t font_h = lv_font_get_line_height(font);
+    static char buffer[16];
+    uint8_t index = lv_obj_get_child_id(obj);
+    lv_roller_get_selected_str(obj, buffer, sizeof(buffer));
+    if (index == 0)
+        choose_year=atoi(buffer);
+    else
+        choose_month=atoi(buffer);
 
-        lv_area_t roller_coords;
-        lv_obj_get_coords(obj, &roller_coords);
+    // static int16_t mask_top_id = -1;
+    // static int16_t mask_bottom_id = -1;
+    // if (code == LV_EVENT_COVER_CHECK) {
+    //     lv_event_set_cover_res(e, LV_COVER_RES_MASKED);
+    // } else if (code == LV_EVENT_DRAW_MAIN_BEGIN) {
+    //     /* add mask */
+    //     const lv_font_t * font = lv_obj_get_style_text_font(obj, LV_PART_MAIN);
+    //     lv_coord_t line_space = lv_obj_get_style_text_line_space(obj, LV_PART_MAIN);
+    //     lv_coord_t font_h = lv_font_get_line_height(font);
 
-        lv_area_t rect_area;
-        rect_area.x1 = roller_coords.x1;
-        rect_area.x2 = roller_coords.x2;
-        rect_area.y1 = roller_coords.y1;
-        rect_area.y2 = roller_coords.y1 + (lv_obj_get_height(obj) - font_h - line_space) / 2;
+    //     lv_area_t roller_coords;
+    //     lv_obj_get_coords(obj, &roller_coords);
 
-        lv_draw_mask_fade_param_t * fade_mask_top = (lv_draw_mask_fade_param_t *)lv_mem_buf_get(sizeof(lv_draw_mask_fade_param_t));
-        lv_draw_mask_fade_init(fade_mask_top, &rect_area, LV_OPA_TRANSP, rect_area.y1, LV_OPA_COVER, rect_area.y2);
-        mask_top_id = lv_draw_mask_add(fade_mask_top, NULL);
+    //     lv_area_t rect_area;
+    //     rect_area.x1 = roller_coords.x1;
+    //     rect_area.x2 = roller_coords.x2;
+    //     rect_area.y1 = roller_coords.y1;
+    //     rect_area.y2 = roller_coords.y1 + (lv_obj_get_height(obj) - font_h - line_space) / 2;
 
-        rect_area.y1 = rect_area.y2 + font_h + line_space - 1;
-        rect_area.y2 = roller_coords.y2;
+    //     lv_draw_mask_fade_param_t * fade_mask_top = (lv_draw_mask_fade_param_t *)lv_mem_buf_get(sizeof(lv_draw_mask_fade_param_t));
+    //     lv_draw_mask_fade_init(fade_mask_top, &rect_area, LV_OPA_TRANSP, rect_area.y1, LV_OPA_COVER, rect_area.y2);
+    //     mask_top_id = lv_draw_mask_add(fade_mask_top, NULL);
 
-        lv_draw_mask_fade_param_t * fade_mask_bottom = (lv_draw_mask_fade_param_t *)lv_mem_buf_get(sizeof(lv_draw_mask_fade_param_t));
-        lv_draw_mask_fade_init(fade_mask_bottom, &rect_area, LV_OPA_COVER, rect_area.y1, LV_OPA_TRANSP, rect_area.y2);
-        mask_bottom_id = lv_draw_mask_add(fade_mask_bottom, NULL);
+    //     rect_area.y1 = rect_area.y2 + font_h + line_space - 1;
+    //     rect_area.y2 = roller_coords.y2;
 
-    } else if (code == LV_EVENT_DRAW_POST_END) {
-        lv_draw_mask_fade_param_t * fade_mask_top = (lv_draw_mask_fade_param_t *)lv_draw_mask_remove_id(mask_top_id);
-        lv_draw_mask_fade_param_t * fade_mask_bottom = (lv_draw_mask_fade_param_t *)lv_draw_mask_remove_id(mask_bottom_id);
-        lv_draw_mask_free_param(fade_mask_top);
-        lv_draw_mask_free_param(fade_mask_bottom);
-        lv_mem_buf_release(fade_mask_top);
-        lv_mem_buf_release(fade_mask_bottom);
-        mask_top_id = -1;
-        mask_bottom_id = -1;
-    } else if (code == LV_EVENT_VALUE_CHANGED){
-        static char buffer[16];
-        uint8_t index = lv_obj_get_child_id(obj);
-        lv_roller_get_selected_str(obj, buffer, sizeof(buffer));
-        if (index == 0)
-            choose_year=atoi(buffer);
-        else
-            choose_month=atoi(buffer);
-    }
+    //     lv_draw_mask_fade_param_t * fade_mask_bottom = (lv_draw_mask_fade_param_t *)lv_mem_buf_get(sizeof(lv_draw_mask_fade_param_t));
+    //     lv_draw_mask_fade_init(fade_mask_bottom, &rect_area, LV_OPA_COVER, rect_area.y1, LV_OPA_TRANSP, rect_area.y2);
+    //     mask_bottom_id = lv_draw_mask_add(fade_mask_bottom, NULL);
+
+    // } else if (code == LV_EVENT_DRAW_POST_END) {
+    //     lv_draw_mask_fade_param_t * fade_mask_top = (lv_draw_mask_fade_param_t *)lv_draw_mask_remove_id(mask_top_id);
+    //     lv_draw_mask_fade_param_t * fade_mask_bottom = (lv_draw_mask_fade_param_t *)lv_draw_mask_remove_id(mask_bottom_id);
+    //     lv_draw_mask_free_param(fade_mask_top);
+    //     lv_draw_mask_free_param(fade_mask_bottom);
+    //     lv_mem_buf_release(fade_mask_top);
+    //     lv_mem_buf_release(fade_mask_bottom);
+    //     mask_top_id = -1;
+    //     mask_bottom_id = -1;
+    // } else if (code == LV_EVENT_VALUE_CHANGED){
+    //     static char buffer[16];
+    //     uint8_t index = lv_obj_get_child_id(obj);
+    //     lv_roller_get_selected_str(obj, buffer, sizeof(buffer));
+    //     if (index == 0)
+    //         choose_year=atoi(buffer);
+    //     else
+    //         choose_month=atoi(buffer);
+    // }
 }
 
 static void DateMenu_Back_Event(lv_event_t* e)
@@ -156,7 +164,8 @@ void Load_DateMenu(void)
     lv_obj_set_style_bg_color(cont, lv_color_black(), LV_PART_MAIN);
     lv_obj_set_style_bg_opa(cont, LV_OPA_COVER, LV_PART_MAIN);
     lv_obj_center(cont);
-    choose_year = Clock_Info.year;choose_month = Clock_Info.month;
+    choose_year = Clock_Info.year;
+    choose_month = Clock_Info.month;
 
     lv_obj_t* date_year, * date_month;
     // 年份列表
@@ -165,6 +174,7 @@ void Load_DateMenu(void)
     lv_obj_align(date_year, LV_ALIGN_CENTER, -25, 0);
     lv_obj_set_style_bg_color(date_year, lv_color_black(), LV_PART_MAIN);
     lv_obj_set_style_bg_opa(date_year, LV_OPA_COVER, LV_PART_MAIN);
+    lv_obj_set_style_border_color(date_year, lv_color_hex(0x323130), 0);
     lv_obj_set_style_text_color(date_year, lv_color_white(), LV_PART_MAIN);
     lv_obj_set_style_bg_opa(date_year, LV_OPA_TRANSP, LV_PART_SELECTED);
 
@@ -177,7 +187,7 @@ void Load_DateMenu(void)
                         "2024\n""2025\n""2026\n""2027\n""2028\n""2029\n""2030",
                         LV_ROLLER_MODE_INFINITE);
     lv_roller_set_visible_row_count(date_year, 3);
-    lv_obj_add_event_cb(date_year, DateMenu_Roller_Event, LV_EVENT_ALL, NULL);
+    lv_obj_add_event_cb(date_year, DateMenu_Roller_Event, LV_EVENT_VALUE_CHANGED, NULL);
     lv_roller_set_selected(date_year, LV_ABS(Clock_Info.year-2010), LV_ANIM_OFF);
     // 月份列表
     date_month = lv_roller_create(cont);
@@ -185,6 +195,7 @@ void Load_DateMenu(void)
     lv_obj_align(date_month, LV_ALIGN_CENTER, 25, 0);
     lv_obj_set_style_bg_color(date_month, lv_color_black(), LV_PART_MAIN);
     lv_obj_set_style_bg_opa(date_month, LV_OPA_COVER, LV_PART_MAIN);
+    lv_obj_set_style_border_color(date_month, lv_color_hex(0x323130), 0);
     lv_obj_set_style_text_color(date_month, lv_color_white(), LV_PART_MAIN);
     lv_obj_set_style_bg_opa(date_month, LV_OPA_TRANSP, LV_PART_SELECTED);
 
@@ -192,11 +203,11 @@ void Load_DateMenu(void)
     lv_obj_set_style_text_font(date_month, &zh_cn_jshaoer_18, LV_PART_SELECTED);
 
     lv_roller_set_options(date_month,
-                        "1\n""2\n""3\n""4\n""5\n""6\n"
-                        "7\n""8\n""9\n""10\n""11\n""12",
+                        "01\n""02\n""03\n""04\n""05\n""06\n"
+                        "07\n""08\n""09\n""10\n""11\n""12",
                         LV_ROLLER_MODE_INFINITE);
     lv_roller_set_visible_row_count(date_month, 3);
-    lv_obj_add_event_cb(date_month, DateMenu_Roller_Event, LV_EVENT_ALL, NULL);
+    lv_obj_add_event_cb(date_month, DateMenu_Roller_Event, LV_EVENT_VALUE_CHANGED, NULL);
     lv_roller_set_selected(date_month, LV_ABS(Clock_Info.month-1), LV_ANIM_OFF);
     // 右键按钮
     lv_obj_t* btn_right = lv_btn_create(cont);

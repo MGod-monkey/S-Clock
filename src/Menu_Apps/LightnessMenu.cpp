@@ -17,6 +17,7 @@ static void LightnessMenu_Slider_Event(lv_event_t* e)
 
         Lightness_setPercent(lightness_percent*20);
         ESPSave_updateConfig(SAVE_CMD_LIGHTNESS);
+        View_Show_Topbox("设置亮度成功!", 1200);
     }
 }
 

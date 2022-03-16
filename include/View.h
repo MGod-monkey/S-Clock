@@ -43,6 +43,8 @@ void Menu_Back_Home(lv_event_t* e);
 
 void Home_To_Menu(lv_event_t* e);
 
+void View_Show_Topbox(const char* mess_txt, uint32_t time);
+
 void View_Show_Messagebox(const char* title, const char* txt);
 
 void View_Show_Messagebox(const char* title, const char* txt, uint32_t delay_ms);

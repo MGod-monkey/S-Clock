@@ -535,5 +535,5 @@ void Load_OptionMenu(void)
     lv_group_focus_obj(lv_obj_get_child(cont, 0));
 
     NOW_PAGE = OptionMenu_Page;
-    lv_scr_load_anim(main_cont, LV_SCR_LOAD_ANIM_FADE_ON, 500, 0, false);
+    lv_scr_load_anim(main_cont, LV_SCR_LOAD_ANIM_FADE_ON, 500, 0, true);
 }

@@ -25,6 +25,51 @@ void Home_To_Menu(lv_event_t* e)
     Load_MenuView(false);
 }
 
+static void View_Del_Obj(lv_anim_t* a)
+{
+    lv_obj_del((lv_obj_t*)a->var);
+}
+
+void View_Show_Topbox(const char* mess_txt, uint32_t continue_time)
+{
+    lv_obj_t* cont = lv_obj_create(lv_scr_act());
+    lv_obj_set_size(cont, 100, LV_SIZE_CONTENT);
+    lv_obj_set_style_border_width(cont, 0, 0);
+    lv_obj_set_style_bg_color(cont, lv_color_hex(0x605e5c), 0);
+    lv_obj_set_style_opa(cont, LV_OPA_COVER, 0);
+    lv_obj_set_scrollbar_mode(cont, LV_SCROLLBAR_MODE_OFF);
+    lv_obj_t* txt = lv_label_create(cont);
+    lv_label_set_text(txt, mess_txt);
+    lv_obj_set_style_text_font(txt, &zh_cn_jshaoer_14, 0);
+    lv_label_set_long_mode(txt, LV_LABEL_LONG_SCROLL_CIRCULAR);
+    lv_obj_center(txt);
+    uint32_t start_y = lv_obj_get_height(cont);
+    lv_obj_set_x(cont, 14);
+    lv_obj_set_y(cont, -start_y);
+
+    // 自上向下显示动画
+    lv_anim_t a;
+    lv_anim_init(&a);
+    lv_anim_set_var(&a, cont);
+    lv_anim_set_values(&a, -start_y, 0);
+    lv_anim_set_time(&a, 800);
+    lv_anim_set_delay(&a, 0);
+    lv_anim_set_exec_cb(&a, (lv_anim_exec_xcb_t)lv_obj_set_y);
+    // lv_anim_set_ready_cb(&a, ready_cb);
+    lv_anim_set_path_cb(&a, lv_anim_path_ease_in);
+    lv_anim_start(&a);
+    // 自下向上显示动画
+    lv_anim_t b;
+    lv_anim_init(&b);
+    lv_anim_set_var(&b, cont);
+    lv_anim_set_values(&b, 0, -start_y);
+    lv_anim_set_time(&b, 800);
+    lv_anim_set_delay(&b, continue_time);
+    lv_anim_set_exec_cb(&b, (lv_anim_exec_xcb_t)lv_obj_set_y);
+    lv_anim_set_ready_cb(&b, View_Del_Obj);
+    lv_anim_set_path_cb(&b, lv_anim_path_ease_out);
+    lv_anim_start(&b);
+}
 
 void View_Show_Messagebox(const char* title, const char* txt)
 {
@@ -48,10 +93,10 @@ void View_Show_Messagebox(const char* title, const char* txt)
 
 void View_Show_Messagebox(const char* title, const char* txt, uint32_t delay_ms)
 {
-    lv_obj_t* mbox = lv_msgbox_create(lv_scr_act(), title, txt, NULL, false);
-    lv_obj_refr_size(mbox);
+    lv_obj_t* mbox = lv_msgbox_create(lv_layer_top(), title, txt, NULL, false);
     lv_obj_set_style_bg_color(mbox, lv_color_hex(0x686868), 0);
     lv_obj_set_style_bg_opa(mbox, LV_OPA_COVER, 0);
+    lv_obj_center(mbox);
     lv_obj_t* mbox_title = lv_msgbox_get_title(mbox);
     lv_obj_set_style_text_font(mbox_title, &zh_cn_jshaoer_14, 0);
     lv_obj_set_style_text_color(mbox_title, lv_color_white(), 0);

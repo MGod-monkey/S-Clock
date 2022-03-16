@@ -47,48 +47,7 @@ static void AlarmMenu_Roller_Event(lv_event_t* e)
     lv_event_code_t code = lv_event_get_code(e);
     lv_obj_t *obj = lv_event_get_target(e);
 
-    static int16_t mask_top_id = -1;
-    static int16_t mask_bottom_id = -1;
-
-    if (code == LV_EVENT_COVER_CHECK) {
-        lv_event_set_cover_res(e, LV_COVER_RES_MASKED);
-
-    } else if (code == LV_EVENT_DRAW_MAIN_BEGIN) {
-        /* add mask */
-        const lv_font_t * font = lv_obj_get_style_text_font(obj, LV_PART_MAIN);
-        lv_coord_t line_space = lv_obj_get_style_text_line_space(obj, LV_PART_MAIN);
-        lv_coord_t font_h = lv_font_get_line_height(font);
-
-        lv_area_t roller_coords;
-        lv_obj_get_coords(obj, &roller_coords);
-
-        lv_area_t rect_area;
-        rect_area.x1 = roller_coords.x1;
-        rect_area.x2 = roller_coords.x2;
-        rect_area.y1 = roller_coords.y1;
-        rect_area.y2 = roller_coords.y1 + (lv_obj_get_height(obj) - font_h - line_space) / 2;
-
-        lv_draw_mask_fade_param_t * fade_mask_top = (lv_draw_mask_fade_param_t *)lv_mem_buf_get(sizeof(lv_draw_mask_fade_param_t));
-        lv_draw_mask_fade_init(fade_mask_top, &rect_area, LV_OPA_TRANSP, rect_area.y1, LV_OPA_COVER, rect_area.y2);
-        mask_top_id = lv_draw_mask_add(fade_mask_top, NULL);
-
-        rect_area.y1 = rect_area.y2 + font_h + line_space - 1;
-        rect_area.y2 = roller_coords.y2;
-
-        lv_draw_mask_fade_param_t * fade_mask_bottom = (lv_draw_mask_fade_param_t *)lv_mem_buf_get(sizeof(lv_draw_mask_fade_param_t));
-        lv_draw_mask_fade_init(fade_mask_bottom, &rect_area, LV_OPA_COVER, rect_area.y1, LV_OPA_TRANSP, rect_area.y2);
-        mask_bottom_id = lv_draw_mask_add(fade_mask_bottom, NULL);
-
-    } else if (code == LV_EVENT_DRAW_POST_END) {
-        lv_draw_mask_fade_param_t * fade_mask_top = (lv_draw_mask_fade_param_t *)lv_draw_mask_remove_id(mask_top_id);
-        lv_draw_mask_fade_param_t * fade_mask_bottom = (lv_draw_mask_fade_param_t *)lv_draw_mask_remove_id(mask_bottom_id);
-        lv_draw_mask_free_param(fade_mask_top);
-        lv_draw_mask_free_param(fade_mask_bottom);
-        lv_mem_buf_release(fade_mask_top);
-        lv_mem_buf_release(fade_mask_bottom);
-        mask_top_id = -1;
-        mask_bottom_id = -1;
-    } else if (code == LV_EVENT_VALUE_CHANGED){
+    if (code == LV_EVENT_VALUE_CHANGED){
         uint8_t index = lv_obj_get_child_id(obj);
         uint8_t value = (uint8_t)lv_roller_get_selected(obj);
         if (index == 0)
@@ -97,6 +56,57 @@ static void AlarmMenu_Roller_Event(lv_event_t* e)
             Alarm_setTime(select_index, 0, value);
     } else if (code == LV_EVENT_FOCUSED)
         lv_obj_scroll_to_view(lv_obj_get_parent(obj), LV_ANIM_ON);
+
+    // static int16_t mask_top_id = -1;
+    // static int16_t mask_bottom_id = -1;
+
+    // if (code == LV_EVENT_COVER_CHECK) {
+    //     lv_event_set_cover_res(e, LV_COVER_RES_MASKED);
+
+    // } else if (code == LV_EVENT_DRAW_MAIN_BEGIN) {
+    //     /* add mask */
+    //     const lv_font_t * font = lv_obj_get_style_text_font(obj, LV_PART_MAIN);
+    //     lv_coord_t line_space = lv_obj_get_style_text_line_space(obj, LV_PART_MAIN);
+    //     lv_coord_t font_h = lv_font_get_line_height(font);
+
+    //     lv_area_t roller_coords;
+    //     lv_obj_get_coords(obj, &roller_coords);
+
+    //     lv_area_t rect_area;
+    //     rect_area.x1 = roller_coords.x1;
+    //     rect_area.x2 = roller_coords.x2;
+    //     rect_area.y1 = roller_coords.y1;
+    //     rect_area.y2 = roller_coords.y1 + (lv_obj_get_height(obj) - font_h - line_space) / 2;
+
+    //     lv_draw_mask_fade_param_t * fade_mask_top = (lv_draw_mask_fade_param_t *)lv_mem_buf_get(sizeof(lv_draw_mask_fade_param_t));
+    //     lv_draw_mask_fade_init(fade_mask_top, &rect_area, LV_OPA_TRANSP, rect_area.y1, LV_OPA_COVER, rect_area.y2);
+    //     mask_top_id = lv_draw_mask_add(fade_mask_top, NULL);
+
+    //     rect_area.y1 = rect_area.y2 + font_h + line_space - 1;
+    //     rect_area.y2 = roller_coords.y2;
+
+    //     lv_draw_mask_fade_param_t * fade_mask_bottom = (lv_draw_mask_fade_param_t *)lv_mem_buf_get(sizeof(lv_draw_mask_fade_param_t));
+    //     lv_draw_mask_fade_init(fade_mask_bottom, &rect_area, LV_OPA_COVER, rect_area.y1, LV_OPA_TRANSP, rect_area.y2);
+    //     mask_bottom_id = lv_draw_mask_add(fade_mask_bottom, NULL);
+
+    // } else if (code == LV_EVENT_DRAW_POST_END) {
+    //     lv_draw_mask_fade_param_t * fade_mask_top = (lv_draw_mask_fade_param_t *)lv_draw_mask_remove_id(mask_top_id);
+    //     lv_draw_mask_fade_param_t * fade_mask_bottom = (lv_draw_mask_fade_param_t *)lv_draw_mask_remove_id(mask_bottom_id);
+    //     lv_draw_mask_free_param(fade_mask_top);
+    //     lv_draw_mask_free_param(fade_mask_bottom);
+    //     lv_mem_buf_release(fade_mask_top);
+    //     lv_mem_buf_release(fade_mask_bottom);
+    //     mask_top_id = -1;
+    //     mask_bottom_id = -1;
+    // } else if (code == LV_EVENT_VALUE_CHANGED){
+    //     uint8_t index = lv_obj_get_child_id(obj);
+    //     uint8_t value = (uint8_t)lv_roller_get_selected(obj);
+    //     if (index == 0)
+    //         Alarm_setTime(select_index, value, 0);
+    //     else 
+    //         Alarm_setTime(select_index, 0, value);
+    // } else if (code == LV_EVENT_FOCUSED)
+    //     lv_obj_scroll_to_view(lv_obj_get_parent(obj), LV_ANIM_ON);
 }
 
 static void AlarmMenu_Choose_Weekday_Event(lv_event_t* e)
@@ -270,6 +280,7 @@ void AlarmMenu_Setting_Page(void)
     lv_obj_align(alarm_hour, LV_ALIGN_CENTER, -30, 0);
     lv_obj_set_style_bg_color(alarm_hour, lv_color_black(), LV_PART_MAIN);
     lv_obj_set_style_bg_opa(alarm_hour, LV_OPA_COVER, LV_PART_MAIN);
+    lv_obj_set_style_border_color(alarm_hour, lv_color_hex(0x323130), 0);
     lv_obj_set_style_text_color(alarm_hour, lv_color_white(), LV_PART_MAIN);
     lv_obj_set_style_bg_opa(alarm_hour, LV_OPA_TRANSP, LV_PART_SELECTED);
 
@@ -277,13 +288,13 @@ void AlarmMenu_Setting_Page(void)
     lv_obj_set_style_text_font(alarm_hour, &zh_cn_jshaoer_18, LV_PART_SELECTED);
 
     lv_roller_set_options(alarm_hour,
-                        "0\n""1\n""2\n""3\n""4\n""5\n""6\n"
-                        "7\n""8\n""9\n""10\n""11\n""12\n"
+                        "00\n""01\n""02\n""03\n""04\n""05\n""06\n"
+                        "07\n""08\n""09\n""10\n""11\n""12\n"
                         "13\n""14\n""15\n""16\n""17\n""18\n""19\n"
                         "20\n""21\n""22\n""23",
                         LV_ROLLER_MODE_INFINITE);
     lv_roller_set_visible_row_count(alarm_hour, 3);
-    lv_obj_add_event_cb(alarm_hour, AlarmMenu_Roller_Event, LV_EVENT_ALL, NULL);
+    lv_obj_add_event_cb(alarm_hour, AlarmMenu_Roller_Event, LV_EVENT_VALUE_CHANGED, NULL);
     lv_roller_set_selected(alarm_hour, Alarm_Info_t[select_index].hour, LV_ANIM_OFF);
     // 分钟列表
     alarm_minute = lv_roller_create(cont_page_1);
@@ -291,15 +302,16 @@ void AlarmMenu_Setting_Page(void)
     lv_obj_align(alarm_minute, LV_ALIGN_CENTER, 30, 0);
     lv_obj_set_style_bg_color(alarm_minute, lv_color_black(), LV_PART_MAIN);
     lv_obj_set_style_bg_opa(alarm_minute, LV_OPA_COVER, LV_PART_MAIN);
+    lv_obj_set_style_border_color(alarm_minute, lv_color_hex(0x323130), 0);
     lv_obj_set_style_text_color(alarm_minute, lv_color_white(), LV_PART_MAIN);
     lv_obj_set_style_bg_opa(alarm_minute, LV_OPA_TRANSP, LV_PART_SELECTED);
 
     lv_obj_set_style_text_font(alarm_minute, &zh_cn_jshaoer_12, LV_PART_MAIN);
     lv_obj_set_style_text_font(alarm_minute, &zh_cn_jshaoer_18, LV_PART_SELECTED);
 
-    lv_roller_set_options(alarm_minute,
-                        "0\n""1\n""2\n""3\n""4\n""5\n""6\n"
-                        "7\n""8\n""9\n""10\n""11\n""12\n"
+   lv_roller_set_options(alarm_minute,
+                        "00\n""01\n""02\n""03\n""04\n""05\n""06\n"
+                        "07\n""08\n""09\n""10\n""11\n""12\n"
                         "13\n""14\n""15\n""16\n""17\n""18\n""19\n"
                         "20\n""21\n""22\n""23\n""24\n""25\n""26\n"
                         "28\n""29\n""30\n""31\n""32\n""33\n""34\n"
@@ -309,10 +321,10 @@ void AlarmMenu_Setting_Page(void)
                         "56\n""57\n""58\n""59",
                         LV_ROLLER_MODE_NORMAL);
     lv_roller_set_visible_row_count(alarm_minute, 3);
-    lv_obj_add_event_cb(alarm_minute, AlarmMenu_Roller_Event, LV_EVENT_ALL, NULL);
+    lv_obj_add_event_cb(alarm_minute, AlarmMenu_Roller_Event, LV_EVENT_VALUE_CHANGED, NULL);
     lv_roller_set_selected(alarm_minute, Alarm_Info_t[select_index].minute, LV_ANIM_OFF);
     // 中间的冒号
-    lv_obj_t* label_sign = lv_label_create(cont);
+    lv_obj_t* label_sign = lv_label_create(cont_page_1);
     lv_obj_set_style_text_color(label_sign, lv_color_white(), 0);
     lv_label_set_text(label_sign, ":");
     lv_obj_center(label_sign);
@@ -321,19 +333,21 @@ void AlarmMenu_Setting_Page(void)
     lv_obj_t* label_tip;
     // 模式选择
     cont1 = lv_obj_create(cont_page_2);
-    lv_obj_set_size(cont1, LV_PCT(100), LV_PCT(45));
+    lv_obj_set_size(cont1, LV_PCT(100), LV_SIZE_CONTENT);
     lv_obj_set_style_border_width(cont1, 0, 0);
     lv_obj_set_style_bg_opa(cont1, LV_OPA_COVER, 0);
     lv_obj_set_scrollbar_mode(cont1, LV_SCROLLBAR_MODE_OFF);
     lv_obj_set_style_bg_color(cont1, lv_palette_darken(LV_PALETTE_GREY, 2), 0);
+    lv_obj_set_flex_flow(cont1, LV_FLEX_FLOW_COLUMN);
+    lv_obj_set_flex_align(cont1, LV_FLEX_ALIGN_CENTER, LV_FLEX_ALIGN_CENTER, LV_FLEX_ALIGN_CENTER);
     label_tip = lv_label_create(cont1);
     lv_label_set_text(label_tip, "模式");
-    lv_obj_align(label_tip, LV_ALIGN_LEFT_MID, -5, 0);
+    // lv_obj_align(label_tip, LV_ALIGN_LEFT_MID, -5, 0);
     lv_obj_set_style_text_font(label_tip, &zh_cn_jshaoer_14, 0);
     lv_obj_t* dropdown = lv_dropdown_create(cont1);
-    lv_obj_set_size(dropdown, LV_PCT(70), LV_PCT(100));
+    lv_obj_set_size(dropdown, LV_PCT(100), LV_SIZE_CONTENT);
     lv_obj_set_style_border_width(dropdown, 0, 0);
-    lv_obj_align(dropdown, LV_ALIGN_RIGHT_MID, 5, 0);
+    // lv_obj_align(dropdown, LV_ALIGN_RIGHT_MID, 5, 0);
     lv_obj_set_style_text_font(dropdown, &zh_cn_jshaoer_12, 0);
     lv_obj_t* list = lv_dropdown_get_list(dropdown);
     lv_obj_set_scrollbar_mode(list, LV_SCROLLBAR_MODE_OFF);
@@ -341,6 +355,7 @@ void AlarmMenu_Setting_Page(void)
     lv_dropdown_set_options(dropdown, 
                         "每天\n""单次\n""工作日\n""选定星期");
     lv_dropdown_set_selected(dropdown, Alarm_Info_t[select_index].freq_mode);
+    lv_dropdown_set_dir(dropdown, LV_DIR_TOP);
     lv_obj_add_event_cb(dropdown, AlarmMenu_DropDown_Event, LV_EVENT_VALUE_CHANGED, NULL);
     // // 贪睡开关
     // cont1 = lv_obj_create(cont_page_2);
