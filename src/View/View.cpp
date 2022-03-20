@@ -3,6 +3,7 @@
 bool show_alarmWin = true;
 uint8_t sleep_count = 0;
 lv_indev_t *indev_encoder;
+lv_group_t* group;
 
 void Item_Back_Menu(lv_event_t* e)
 {
@@ -207,7 +208,7 @@ void View_Alarm_Click_Event(lv_event_t* e)
     //     Alarm_endRecentAlarm();    
     // }
     lv_obj_t* obj = lv_event_get_target(e);
-    char* txt = lv_label_get_text(lv_obj_get_child(obj, 0));
+    const char* txt = lv_label_get_text(lv_obj_get_child(obj, 0));
     if (!strcmp(txt, "继续"))
     {
         ++sleep_count;
@@ -219,6 +220,7 @@ void View_Alarm_Click_Event(lv_event_t* e)
         Alarm_endRecentAlarm();    
     }
     Beep_Shutdown();
+    lv_group_del(group);
     View_Close_Top_Objs();
 }
 
@@ -355,7 +357,7 @@ void View_Show_AlarmWin(void)
     lv_obj_align(img, LV_ALIGN_TOP_MID, 0, 2);
 
     lv_obj_t* btn, * label;
-    lv_group_t* group = lv_group_create();
+    group = lv_group_create();
 
     if (Alarm_Info.sleep_mode)
     {
@@ -416,5 +418,7 @@ void View_Close_AlarmWin(void)
         lv_obj_t* cont = lv_obj_get_child(lv_layer_top(), 0);
         lv_obj_del_async(cont);
     }
+
+    lv_group_del(group);
     lv_indev_set_group(indev_encoder, lv_group_get_default());
 }
