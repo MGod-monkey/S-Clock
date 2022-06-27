@@ -23,14 +23,16 @@ void Beep_Init(void){
     }
 }
 
-void Beep_Play(void)
-{
-    Beep.play(melody);  
-}
 
 bool Beep_isPlaying(void)
 {
     return Beep.isPlaying();
+}
+
+void Beep_Play(void)
+{
+    if (!Beep_isPlaying())
+        Beep.play(melody);  
 }
 
 void Beep_Shutdown(void)

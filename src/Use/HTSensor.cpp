@@ -21,7 +21,7 @@ void HTSensor_Update()
     float value;
     value = AHT.readTemperature();
     if (value != AHTXX_ERROR)
-        HTSensor_Info.temp = value;
+        HTSensor_Info.temp = value-3.0;
     else
     {
         SCLOCK_LOGLN("[AHT ERROR] AHT Sensor read failed! Reseting!");

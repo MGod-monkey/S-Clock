@@ -252,6 +252,7 @@ void OptionMenu_Show_NetworkInfo(lv_event_t* e)
     label = lv_label_create(cont_label);
     lv_label_set_text(label, "LOCAL IP:");
     label = lv_label_create(cont_label);
+    lv_label_set_long_mode(label, LV_LABEL_LONG_SCROLL_CIRCULAR);
     lv_label_set_text(label, ESPWifi_localIP());
     lv_obj_set_flex_grow(label, 1);
 

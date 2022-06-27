@@ -3,7 +3,6 @@
 bool show_alarmWin = true;
 uint8_t sleep_count = 0;
 lv_indev_t *indev_encoder;
-lv_group_t* group;
 
 void Item_Back_Menu(lv_event_t* e)
 {
@@ -33,7 +32,21 @@ static void View_Del_Obj(lv_anim_t* a)
 
 void View_Show_Topbox(const char* mess_txt, uint32_t continue_time)
 {
+    // lv_obj_t* mbox = lv_msgbox_create(lv_scr_act(), "消息", mess_txt, NULL, false);
+    // lv_obj_set_style_bg_color(mbox, lv_color_hex(0x686868), 0);
+    // lv_obj_set_style_bg_opa(mbox, LV_OPA_COVER, 0);
+    // lv_obj_set_size(mbox, 100, LV_SIZE_CONTENT);
+    // lv_obj_align(mbox, LV_ALIGN_TOP_MID, 0, 10);
+    // lv_obj_t* mbox_title = lv_msgbox_get_title(mbox);
+    // lv_obj_set_style_text_font(mbox_title, &zh_cn_jshaoer_14, 0);
+    // lv_obj_set_style_text_color(mbox_title, lv_color_white(), 0);
+    // lv_obj_t* mbox_text = lv_msgbox_get_text(mbox);
+    // lv_obj_set_style_text_font(mbox_text, &zh_cn_jshaoer_12, 0);
+    // lv_obj_set_style_text_color(mbox_text, lv_color_white(), 0);
+    // lv_obj_del_delayed(mbox, continue_time);
     lv_obj_t* cont = lv_obj_create(lv_scr_act());
+    LV_ASSERT_MALLOC(cont);
+    
     lv_obj_set_size(cont, 100, LV_SIZE_CONTENT);
     lv_obj_set_style_border_width(cont, 0, 0);
     lv_obj_set_style_bg_color(cont, lv_color_hex(0x605e5c), 0);
@@ -220,7 +233,7 @@ void View_Alarm_Click_Event(lv_event_t* e)
         Alarm_endRecentAlarm();    
     }
     Beep_Shutdown();
-    lv_group_del(group);
+    // lv_group_del(group);
     View_Close_Top_Objs();
 }
 
@@ -317,47 +330,52 @@ void View_Show_AlarmWin(void)
     // lv_group_set_editing(group, true);
     // lv_indev_set_group(indev_encoder, group);
 
-    lv_obj_t* cont = lv_obj_create(lv_layer_top());
-    LV_ASSERT_MALLOC(cont);
+    lv_obj_t* cont = lv_obj_create(NULL);
     lv_obj_remove_style_all(cont);
     lv_obj_set_style_bg_color(cont, lv_palette_darken(LV_PALETTE_GREY, 2), 0);
-    lv_obj_set_style_bg_opa(cont, LV_OPA_90, 0);
+    lv_obj_set_style_bg_opa(cont, LV_OPA_COVER, 0);
     lv_obj_set_style_radius(cont, 10, 0);
-    lv_obj_set_size(cont, 100, 100);
+    lv_obj_set_size(cont, 128, 128);
     lv_obj_center(cont);
 
     // 动态IMG会照成闹钟弹窗卡顿，在没有更好办法前，就此舍弃
-    // LV_IMG_DECLARE(Alarm_0);
-    // // LV_IMG_DECLARE(Alarm_1);
-    // LV_IMG_DECLARE(Alarm_2);
-    // // LV_IMG_DECLARE(Alarm_3);
-    // LV_IMG_DECLARE(Alarm_4);
-    // // LV_IMG_DECLARE(Alarm_5);
-    // LV_IMG_DECLARE(Alarm_6);
-    // static const lv_img_dsc_t* anim_imgs[4] = {
-    //     &Alarm_0,
-    //     // &Alarm_1,
-    //     &Alarm_2,
-    //     // &Alarm_3,
-    //     &Alarm_4,
-    //     // &Alarm_5,
-    //     &Alarm_6,
-    // };
-    // lv_obj_t * animimg_alarm = lv_animimg_create(cont);
-    // lv_obj_center(animimg_alarm);
-    // lv_animimg_set_src(animimg_alarm, (lv_img_dsc_t**)anim_imgs, 4);
-    // lv_animimg_set_duration(animimg_alarm, 1000);
-    // lv_animimg_set_repeat_count(animimg_alarm, LV_ANIM_REPEAT_INFINITE);
-    // lv_animimg_start(animimg_alarm);
-    // lv_obj_align(animimg_alarm, LV_ALIGN_TOP_MID, 0, 2);
-
+    LV_IMG_DECLARE(Alarm_1);
+    LV_IMG_DECLARE(Alarm_2);
+    LV_IMG_DECLARE(Alarm_3);
+    LV_IMG_DECLARE(Alarm_4);
+    LV_IMG_DECLARE(Alarm_5);
     LV_IMG_DECLARE(Alarm_6);
-    lv_obj_t* img = lv_img_create(cont);
-    lv_img_set_src(img, &Alarm_6);
-    lv_obj_align(img, LV_ALIGN_TOP_MID, 0, 2);
+    static const lv_img_dsc_t* anim_imgs[6] = {
+        &Alarm_1,
+        &Alarm_2,
+        &Alarm_3,
+        &Alarm_4,
+        &Alarm_5,
+        &Alarm_6,
+    };
+    lv_obj_t * animimg_alarm = lv_animimg_create(cont);
+    lv_obj_center(animimg_alarm);
+    lv_animimg_set_src(animimg_alarm, (lv_img_dsc_t**)anim_imgs, 4);
+    lv_animimg_set_duration(animimg_alarm, 1000);
+    lv_animimg_set_repeat_count(animimg_alarm, LV_ANIM_REPEAT_INFINITE);
+    lv_animimg_start(animimg_alarm);
+    lv_obj_align(animimg_alarm, LV_ALIGN_TOP_MID, 0, 2);
+
+    lv_obj_t *lab = lv_label_create(cont);
+    lv_obj_set_style_text_color(lab, lv_color_white(), 0);
+    lv_obj_set_style_text_font(lab, &zh_cn_jshaoer_14, 0);
+    lv_label_set_text(lab, "闹铃响了!!!");
+    lv_obj_align_to(lab, animimg_alarm, LV_ALIGN_OUT_BOTTOM_MID, 0, 10);
+
+    // LV_IMG_DECLARE(Alarm_6);
+    // lv_obj_t* img = lv_img_create(cont);
+    // lv_img_set_src(img, &Alarm_6);
+    // lv_obj_align(img, LV_ALIGN_TOP_MID, 0, 2);
 
     lv_obj_t* btn, * label;
-    group = lv_group_create();
+    // group = lv_group_create();
+    lv_group_t * group = lv_group_get_default();
+    lv_group_remove_all_objs(group);
 
     if (Alarm_Info.sleep_mode)
     {
@@ -408,17 +426,18 @@ void View_Show_AlarmWin(void)
     }
 
     lv_indev_set_group(indev_encoder, group);
+    lv_scr_load_anim(cont, LV_SCR_LOAD_ANIM_FADE_ON, 1000, 0, false);
 }
 
 void View_Close_AlarmWin(void)
 {
-    uint8_t cnt = lv_obj_get_child_cnt(lv_layer_top());
-    for (int i=0; i<cnt; i++)
-    {
-        lv_obj_t* cont = lv_obj_get_child(lv_layer_top(), 0);
-        lv_obj_del_async(cont);
-    }
+    Load_ClockView(1);
+    // uint8_t cnt = lv_obj_get_child_cnt(lv_layer_top());
+    // for (int i=0; i<cnt; i++)
+    // {
+    //     lv_obj_t* cont = lv_obj_get_child(lv_layer_top(), 0);
+    //     lv_obj_del_async(cont);
+    // }
 
-    lv_group_del(group);
-    lv_indev_set_group(indev_encoder, lv_group_get_default());
+    // lv_indev_set_group(indev_encoder, lv_group_get_default());
 }

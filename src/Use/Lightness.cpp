@@ -22,7 +22,7 @@ void Lightness_Shutdown(void)
 {
     Lightness_Info.lightness = 0;
     Lightness_Info.lightness_percent = 0;
-    digitalWrite(LIGHTNESS_PIN, LOW);
+    dacWrite(LIGHTNESS_PIN, 0);
     // dacWrite(LIGHTNESS_PIN, 0);
 }
 

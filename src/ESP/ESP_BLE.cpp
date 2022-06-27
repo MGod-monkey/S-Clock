@@ -75,7 +75,7 @@ class CharacteristicCallbacks: public NimBLECharacteristicCallbacks {
             Clock_setTime(hour, minute, 0);
             char buffer[] = "[BLE MESS] set time: hh:mm";
             SCLOCK_LOGLN(Clock_toString(buffer));
-            View_Show_Topbox("设置时间成功!", 1200);
+            // View_Show_Topbox("设置时间成功!", 1200);
         }
         // date格式:20220101->(2022/01/01)
         else if (!uuid.compare(UUID_FULL_NAME(CHARACTERUUID_CLOCK_DATE).c_str()))
@@ -86,7 +86,7 @@ class CharacteristicCallbacks: public NimBLECharacteristicCallbacks {
             Clock_setDate(year, month, day);
             char buffer[] = "[BLE MESS] set date: YY/MM/DD";
             SCLOCK_LOGLN(Clock_toString(buffer));
-            View_Show_Topbox("设置日期成功!", 1200);
+            // View_Show_Topbox("设置日期成功!", 1200);
         }
         // 添加闹钟数量
         else if (!uuid.compare(UUID_FULL_NAME(CHARACTERUUID_ALARM_NUM).c_str()))
@@ -97,10 +97,11 @@ class CharacteristicCallbacks: public NimBLECharacteristicCallbacks {
             Alarm_setAlarmNum(alarm_num);
             if (NOW_PAGE == AlarmMenu_Page)
                 AlarmMenu_Update();
-            else
-                View_Show_Topbox("添加闹钟数量成功!", 1200);
+            // else
+                // View_Show_Topbox("添加闹钟数量成功!", 1200);
         } 
         // alarm格式:  如11120010000000
+        //               10120011111111
         // 第1个数：闹钟索引 index(1~5)
         // 第2个数：开启或关闭 on:1/off:0
         // 第3~6个数：闹钟时间 1200->12:00
@@ -117,7 +118,7 @@ class CharacteristicCallbacks: public NimBLECharacteristicCallbacks {
             SCLOCK_LOGLN(Alarm_toString(buffer));
             if (NOW_PAGE == AlarmMenu_Page)
                 AlarmMenu_Update();
-            View_Show_Topbox("设置闹钟成功!", 1200);
+            // View_Show_Topbox("设置闹钟成功!", 1200);
         } 
         // 天气格式: 如0guiling或1xxxxxxxxxxx
         // 第一个数：设置天气秘钥或天气城市
@@ -138,7 +139,7 @@ class CharacteristicCallbacks: public NimBLECharacteristicCallbacks {
                 Weather_setCity(_value);
                 SCLOCK_LOG("[BLE MESS] set weather city: ");
                 SCLOCK_LOGLN(_value);
-                View_Show_Topbox("设置天气城市成功!", 1200);
+                // View_Show_Topbox("设置天气城市成功!", 1200);
             }
         }
     };

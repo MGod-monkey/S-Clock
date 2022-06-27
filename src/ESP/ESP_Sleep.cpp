@@ -16,14 +16,13 @@ void ESPSleep_Init(void)
 void ESPSleep_Start(void)
 {
     ESPSleep_Info.on_sleep = true;
+    Lightness_Shutdown();
     switch (ESPSleep_Info.sleep_mode)
     {
         case 0:
-            Lightness_Shutdown();
             esp_deep_sleep_start();
             break;
         case 1:
-            Lightness_Shutdown();
             break;
     }        
 }

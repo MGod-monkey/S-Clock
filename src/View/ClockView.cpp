@@ -90,19 +90,19 @@ static void ClockView_Update(lv_timer_t* timer)
     {
         if (show_alarmWin) 
         { 
-            // View_Show_AlarmWin();
+            View_Show_AlarmWin();
             // View_Show_Messagebox("消息", "闹钟响了!", 10*1000);
             show_alarmWin = false;
         }
-        // else 
-        // {
-        //     if (!Beep_isPlaying())
-        //         Beep_Play();
-        // }
+        else 
+        {
+            if (!Beep_isPlaying())
+                Beep_Play();
+        }
     } else if (!show_alarmWin)
     {
         Beep_Shutdown();
-        // View_Close_AlarmWin();
+        View_Close_AlarmWin();
         // if (Alarm_Info.sleep_mode)
         // {
         //     ++sleep_count;
@@ -139,11 +139,11 @@ static void ClockView_Update2(lv_timer_t* timer)
             View_Show_AlarmWin();
             show_alarmWin = false;
         }
-        // else
-        // {
-        //     if (!Beep_isPlaying())
-        //         Beep_Play();
-        // }
+        else
+        {
+            if (!Beep_isPlaying())
+                Beep_Play();
+        }
     } else if (!show_alarmWin)
     {
         Beep_Shutdown();

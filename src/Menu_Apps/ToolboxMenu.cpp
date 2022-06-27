@@ -65,7 +65,7 @@ static void ToolboxMenu_Network_Update(lv_timer_t* timer)
         lv_timer_del(timer);
         ESPSave_updateConfig(SAVE_CMD_WIFI);
         static const char *btns[] = {"退出", ""};
-        View_Show_Messagebox("消息", "成功连接上Wifi!", btns, ToolboxMenu_Network_Btn_Event);
+        View_Show_Messagebox("消息", "成功连接到Wifi!", btns, ToolboxMenu_Network_Btn_Event);
     }
     else if (millis() - start_time >= WIFI_CONNECT_TIMEOUT && Wifi_Info.smartconfig_status == WF_CONNECTED)
     {
@@ -245,20 +245,23 @@ void Load_ToolboxMenu(void)
     lv_obj_add_style(list, &style_scrolled, LV_PART_SCROLLBAR | LV_STATE_SCROLLED);
     lv_group_t* group = lv_group_get_default();
     lv_group_remove_all_objs(group);
+    lv_group_set_wrap(group, true);
 
     ToolboxMenu_addItem(list, (lv_event_cb_t)Load_ToolboxMenu_Network, &icon_network, "配网");
     ToolboxMenu_addItem(list, (lv_event_cb_t)Load_ToolboxMenu_Flashlight, &icon_flashLED, "手电筒");
     ToolboxMenu_addItem(list, (lv_event_cb_t)ToolboxMenu_NTPTime, &icon_ntptime, "NTP校时");
+    ToolboxMenu_addItem(list, Item_Back_Menu, &icon_return, "返回");
 
-    // 退出按钮
-    lv_obj_t* btn_back = lv_btn_create(cont);
-    lv_obj_remove_style_all(btn_back);
-    lv_obj_set_size(btn_back, 1, 1);
-    lv_obj_set_align(btn_back, LV_ALIGN_BOTTOM_LEFT);
+
+    // // 退出按钮
+    // lv_obj_t* btn_back = lv_btn_create(cont);
+    // lv_obj_remove_style_all(btn_back);
+    // lv_obj_set_size(btn_back, 1, 1);
+    // lv_obj_set_align(btn_back, LV_ALIGN_BOTTOM_LEFT);
     // lv_obj_add_event_cb(btn_back, Item_Back_Menu, LV_EVENT_CLICKED, NULL);
-    lv_obj_add_event_cb(btn_back, Item_Back_Menu, LV_EVENT_LONG_PRESSED, NULL);
-    lv_group_add_obj(group, btn_back);
-    lv_group_focus_obj(btn_back);
+    // lv_obj_add_event_cb(btn_back, Item_Back_Menu, LV_EVENT_LONG_PRESSED, NULL);
+    // lv_group_add_obj(group, btn_back);
+    // lv_group_focus_obj(btn_back);
 
     NOW_PAGE = ToolboxMenu_Page;
     lv_scr_load_anim(cont, LV_SCR_LOAD_ANIM_FADE_ON, 500, 500, true);

@@ -31,6 +31,7 @@ LV_IMG_DECLARE(kenan);
 LV_IMG_DECLARE(icon_back);
 LV_IMG_DECLARE(icon_time);
 LV_IMG_DECLARE(icon_date);
+LV_IMG_DECLARE(icon_return);
 LV_IMG_DECLARE(icon_ble_no);
 LV_IMG_DECLARE(icon_ble_on);
 LV_IMG_DECLARE(icon_wifi_no);
